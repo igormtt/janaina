@@ -1,0 +1,12 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+
+output/*
+!output/.gitkeep
+
+token_cache.bin
+
+*.xlsx
+*.csv
