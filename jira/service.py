@@ -1,6 +1,5 @@
 from jira.client import JiraClient
 
-
 JQL = """
 project IN (CNI, CDAU)
 AND status IN (
@@ -46,7 +45,7 @@ ORDER BY "cf[10599]" DESC, created ASC, updated ASC
 """.strip()
 
 
-def collect_issues():
+def collect_issues() -> list[dict]:
 
     client = JiraClient()
 
@@ -54,53 +53,33 @@ def collect_issues():
         "summary",
         "status",
         "assignee",
+        "updated",
     ]
 
-    response = client.search_issues(
+    issues = client.search_issues(
         jql=JQL,
         fields=fields,
     )
 
-    issues = []
+    result = []
 
-    for issue in response.get(
-        "issues",
-        []
-    ):
+    for issue in issues:
 
-        fields = issue.get(
-            "fields",
-            {}
+        fields_data = issue.get("fields", {})
+
+        status = fields_data.get("status") or {}
+
+        assignee = fields_data.get("assignee") or {}
+
+        result.append(
+            {
+                "key": issue.get("key"),
+                "summary": fields_data.get("summary"),
+                "status": status.get("name"),
+                "assignee_name": assignee.get("displayName"),
+                "assignee_account_id": assignee.get("accountId"),
+                "updated": fields_data.get("updated"),
+            }
         )
 
-        status = fields.get(
-            "status"
-        ) or {}
-
-        assignee = fields.get(
-            "assignee"
-        ) or {}
-
-        issues.append({
-            "key": issue.get(
-                "key"
-            ),
-
-            "summary": fields.get(
-                "summary"
-            ),
-
-            "status": status.get(
-                "name"
-            ),
-
-            "assignee_name": assignee.get(
-                "displayName"
-            ),
-
-            "assignee_account_id": assignee.get(
-                "accountId"
-            ),
-        })
-
-    return issues
+    return result
