@@ -42,6 +42,7 @@ class JiraClient:
         url = f"{JIRA_BASE_URL}" "/rest/api/3/search/jql"
 
         all_issues = []
+
         next_page_token = None
 
         while True:
@@ -53,6 +54,7 @@ class JiraClient:
             }
 
             if next_page_token:
+
                 params["nextPageToken"] = next_page_token
 
             response = self.session.get(
@@ -67,7 +69,10 @@ class JiraClient:
 
             data = response.json()
 
-            issues = data.get("issues", [])
+            issues = data.get(
+                "issues",
+                [],
+            )
 
             all_issues.extend(issues)
 
@@ -128,6 +133,7 @@ class JiraClient:
         params = {}
 
         if fields:
+
             params["fields"] = ",".join(fields)
 
         response = self.session.get(
@@ -149,6 +155,25 @@ class JiraClient:
 
         response = self.session.get(
             url,
+            timeout=30,
+        )
+
+        response.raise_for_status()
+
+        return response.json()
+
+    def get_user(
+        self,
+        account_id: str,
+    ) -> dict:
+
+        url = f"{JIRA_BASE_URL}" "/rest/api/3/user"
+
+        response = self.session.get(
+            url,
+            params={
+                "accountId": account_id,
+            },
             timeout=30,
         )
 
