@@ -303,7 +303,7 @@ def build_reminder_message(
                 "por favor?"
             ),
             "<br><br>",
-            "Obrigado! 😊",
+            "Obrigada! 😊",
         ])
 
     else:

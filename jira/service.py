@@ -1,6 +1,6 @@
 from jira.client import JiraClient
 
-JQL = """
+JQL =  """
 project IN (CNI, CDAU)
 AND status IN (
     Aberto,
@@ -17,7 +17,7 @@ AND status IN (
     "Aguardando Cliente",
     "Aguardando Fornecedor",
     "Aguardando Reunião De Estratégia",
-    Aprovado,
+    Aprovado, 
     Briefing,
     Discovery,
     "Em Análise",
@@ -27,7 +27,7 @@ AND status IN (
     "EM EXECUÇÃO N3",
     "Em Execução NOC",
     "Em Homologação",
-    Encaminhado,
+    Encaminhado, 
     "Encaminhado N1/N2",
     "ENCAMINHADO N3",
     "Encaminhado NOC",
